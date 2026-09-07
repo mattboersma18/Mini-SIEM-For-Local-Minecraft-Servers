@@ -1,0 +1,4 @@
+//For this project we will be using Python with the following Libraries:
+//1. Paramiko
+//2. Mcron
+//3. python-dotenv
