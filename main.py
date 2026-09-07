@@ -15,7 +15,7 @@ with SSHClient() as client:
     client.set_missing_host_key_policy(AutoAddPolicy())
 
     client.connect(hostname=HOST, port=PORT, username=USERNAME, password=PASSWORD, timeout=10)
-    command = f"tail -F -n 0 {LOG_PATH}"
+    command = "journalctl -u minecraft.service -f -n 0"
 
     stdin, stdout, stderr = client.exec_command(command)
     print(f"Connected to {HOST}:{PORT} as {USERNAME}. Streaming logs from {LOG_PATH}...\n")
