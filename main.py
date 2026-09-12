@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from paramiko import SSHClient, AutoAddPolicy
+from parser import parse_line
 
 load_dotenv()
 
@@ -22,7 +23,9 @@ with SSHClient() as client:
 
     try:
         for line in stdout:
-            print(line.strip())
+            event = parse_line(line.strip())
+            if event:
+                 print(event)
     except KeyboardInterrupt:
             print("\nLog streaming interrupted by user.")
 
