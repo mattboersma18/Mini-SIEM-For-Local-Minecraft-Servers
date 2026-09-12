@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from paramiko import SSHClient, AutoAddPolicy
 from parser import parse_line
+from rules import check_brute_force
 
 load_dotenv()
 
@@ -26,6 +27,9 @@ with SSHClient() as client:
             event = parse_line(line.strip())
             if event:
                  print(event)
+                 alert = check_brute_force(event)
+                 if alert:
+                        print(alert)
     except KeyboardInterrupt:
             print("\nLog streaming interrupted by user.")
 
