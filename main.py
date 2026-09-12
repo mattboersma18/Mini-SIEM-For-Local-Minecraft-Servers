@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from paramiko import SSHClient, AutoAddPolicy
 from parser import parse_line
-from rules import check_brute_force
+from rules import check_rapid_reconnection
 
 load_dotenv()
 
@@ -27,7 +27,7 @@ with SSHClient() as client:
             event = parse_line(line.strip())
             if event:
                  print(event)
-                 alert = check_brute_force(event)
+                 alert = check_rapid_reconnection(event)
                  if alert:
                         print(alert)
     except KeyboardInterrupt:

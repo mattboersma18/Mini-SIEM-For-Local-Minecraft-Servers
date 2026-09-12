@@ -5,7 +5,7 @@ RECENT_LOGINS = {}
 THRESHOLD = 3
 WINDOW_SECONDS = 30
 
-def check_brute_force(event):
+def check_rapid_reconnection(event):
     if event["event_type"] != "login":
         return None
 
@@ -18,7 +18,7 @@ def check_brute_force(event):
     RECENT_LOGINS[ip] = history
 
     if len(history) >= THRESHOLD:
-        return f"ALERT: Potential brute force attack detected from IP {ip}. {len(history)} login attempts in the last {WINDOW_SECONDS} seconds."
+        return f"ALERT: Potential rapid reconnection detected from IP {ip}. {len(history)} login attempts in the last {WINDOW_SECONDS} seconds."
 
     return None
 
