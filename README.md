@@ -24,6 +24,8 @@ Another segment of the code is the severity file, which keeps a score of severit
 Lessons Learned:
 This project has taught me many lessons and showed me valueable insight on what specific security software uses to track attackers and maintain system security. (ADD MORE LESSONS HERE)
 
-Although there are many things Id like to add to this project, Id love to make the display more clean and not run out of a terminal. (ADD MORE IMPROVEMENTS HERE)
+Although there are many things Id like to add to this project, Id love to make the display more clean and not run out of a terminal. 
+
+(ADD MORE IMPROVEMENTS HERE)
 
 
