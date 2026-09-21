@@ -5,6 +5,7 @@ RECENT_LOGINS = {}
 
 THRESHOLD = 3
 WINDOW_SECONDS = 30
+POINTS_PER_HIT = 3
 
 def check_rapid_reconnection(event):
     if event["event_type"] != "login":
@@ -19,7 +20,8 @@ def check_rapid_reconnection(event):
     RECENT_LOGINS[ip] = history
 
     if len(history) >= THRESHOLD:
-        return f"ALERT: Potential rapid reconnection detected from IP {ip}. {len(history)} login attempts in the last {WINDOW_SECONDS} seconds."
+        score = severity.add_score(ip, POINTS_PER_HIT)
+        return {"ip": ip, "score": score}
 
     return None
 
