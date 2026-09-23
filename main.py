@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from paramiko import SSHClient, AutoAddPolicy
 from parser import parse_line
-from rules import check_rapid_reconnection
+from rules import check_rapid_reconnection, check_multiple_usernames, check_malformed_username
 import severity
 
 load_dotenv()
@@ -27,11 +27,11 @@ with SSHClient() as client:
         for line in stdout:
             event = parse_line(line.strip())
             if event:
-                print(event)
-                result = check_rapid_reconnection(event)
-                if result:
-                    level = severity.get_severity(result["score"])
-                    print(f"IP {result['ip']} — score: {result['score']} — severity: {level}")
+                for check in (check_rapid_reconnection, check_multiple_usernames, check_malformed_username):
+                    result = check(event)
+                    if result:
+                        level = severity.get_severity(result["score"])
+                        print(f"IP {result['ip']} — score: {result['score']} — severity: {level}")
     except KeyboardInterrupt:
-            print("\nLog streaming interrupted by user.")
+        print("\nLog streaming interrupted by user.")
 

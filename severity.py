@@ -22,3 +22,7 @@ def get_severity(score):
     elif score > 0:
         return "Low"
     return None
+
+def report(ip, points, **extra):
+    score = add_score(ip, points)
+    return {"ip": ip, "score": score, **extra}
