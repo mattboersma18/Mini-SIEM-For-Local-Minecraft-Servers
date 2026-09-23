@@ -27,11 +27,12 @@ with SSHClient() as client:
         for line in stdout:
             event = parse_line(line.strip())
             if event:
+                print(event)
                 for check in (check_rapid_reconnection, check_multiple_usernames, check_malformed_username):
                     result = check(event)
                     if result:
                         level = severity.get_severity(result["score"])
-                        print(f"IP {result['ip']} — score: {result['score']} — severity: {level}")
+                        print(f"IP {result['ip']} — score: {result['score']:.1f} — severity: {level}")
     except KeyboardInterrupt:
         print("\nLog streaming interrupted by user.")
 
