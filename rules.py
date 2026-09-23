@@ -16,6 +16,9 @@ POINTS_PER_HIT_USER = 6
 SUSPICIOUS_USERNAME_PATTERN = re.compile(r"^[a-f0-9]{8,}$|_?\d{5,}$")
 MALFORMED_POINTS = 4
 
+SUSPICIOUS_REASON_KEYWORDS = ["timed out", "internal exception", "decoderexception", "invalid"]
+DISCONNECT_REASON_POINTS = 3
+
 def check_rapid_reconnection(event):
     if event["event_type"] != "login":
         return None
@@ -62,5 +65,17 @@ def check_malformed_username(event):
 
     if SUSPICIOUS_USERNAME_PATTERN.match(username):
         return severity.report(ip, MALFORMED_POINTS, username = username)
+
+    return None
+
+def check_disconnect_reason(event):
+    if event["event_type"] != "disconnect":
+        return None
+
+    ip = event.get("ip")
+    reason = event["reason"].lower()
+
+    if any(keyword in reason for keyword in SUSPICIOUS_REASON_KEYWORDS):
+        return severity.report(ip, DISCONNECT_REASON_POINTS)
 
     return None
