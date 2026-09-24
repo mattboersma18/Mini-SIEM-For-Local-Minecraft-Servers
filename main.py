@@ -15,6 +15,27 @@ USERNAME = os.getenv("MC_SSH_USER")
 PASSWORD = os.getenv("MC_SSH_PASSWORD")
 LOG_PATH = os.getenv("MC_LOG_PATH")
 
+def process_event(event):
+    print(event)
+    for check in (check_rapid_reconnection, check_multiple_usernames, check_malformed_username):
+        result = check(event)
+        if not result:
+            continue
+
+        level = severity.get_severity(result["score"])
+        print(f"IP {result['ip']} — score: {result['score']:.1f} — severity: {level}")
+
+        action = decide(result["ip"], result["score"], level)
+        handle(action, result, event)
+
+
+def handle(action, result, event):
+    if action == "ban":
+        print(f"Banned {result['ip']}")
+    elif action == "kick":
+        kick_player(event.get("username", ""))
+        print(f"Kicked {event.get('username')}")
+
 with SSHClient() as client:
     client.load_system_host_keys()
     client.set_missing_host_key_policy(AutoAddPolicy())
@@ -29,19 +50,6 @@ with SSHClient() as client:
         for line in stdout:
             event = parse_line(line.strip())
             if event:
-                print(event)
-                for check in (check_rapid_reconnection, check_multiple_usernames, check_malformed_username):
-                    result = check(event)
-                    if result:
-                        level = severity.get_severity(result["score"])
-                        print(f"IP {result['ip']} — score: {result['score']:.1f} — severity: {level}")
-                        action = decide(result["ip"], result["score"], level)
-                        if action == "ban":
-                            ban_ip(result["ip"])
-                            print(f"Banned {result['ip']}")
-                        elif action == "kick":
-                            kick_player(event.get("username", ""))
-                            print(f"Kicked {event.get('username')}")
+                process_event(event)
     except KeyboardInterrupt:
         print("\nLog streaming interrupted by user.")
-
