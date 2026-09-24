@@ -1,15 +1,24 @@
 # Mini-SIEM-For-Local-Minecraft-Servers
 This project is a project designed to monitor and track activity in a Minecraft server. This program tracks different types of data and alerts the user of any issues potentially going on with the server.
 
-To start, we have to get the program to actually read what is going on inside of the server, were going to use two different pythong imports in order to do this, paramiko and dotnv
+Setup:
+In order to run the project, you will have to install the three libraries, MCrcon, Dotenv, and paramiko on your device. You will also need to have a .env file connected to your program. A sample .env file is what I used to run the program, just different information needs to be filled out. For your minecraft server, it needs to have the RCON and SSH setup on the server so the program can directly access it. Once everything is filled out and configured, all it takes to run the program is a simple "python main.py" command, and the program should connect to your server.
 
+The three different libraries listed above are as follows:
 Paramiko is a open source library that I will be using to connect directly to the server, it allows the code to connect directly via SSHv2 which is exactly what we want. This makes sure that we have direct contact with the server, and that we dont have to go through multiple mediums in order to check on our server.
 
 Dotenv is a library that allows us to load configuration settings safely, without anyone seeing them. We can create a .env file with sensitive information and the program will automatically withdraw information from that file. API keys, passwords, usernames, IP addresses are just some of the things that we can keep secure inside of a .env file.
 
 In order to initiate offensive security measures for our program, such as banning and kicking players, we will have to use another library called MCRCON.
-
 MCRCON is a library that installs the Minecraft Remote Console (RCON). This allows you to run commands to the server, create announcements or player whitelists with the program. This library is used to deploy the offesnive security features like banning certain IP addresses that have been detected.
+
+Here is a breif outline of the code, with more information below:
+main.py         → connects, streams logs, orchestrates everything
+parser.py       → converts raw log lines into structured events
+rules.py        → detection logic (rapid reconnect, multi-username, malformed usernames)
+severity.py     → scoring engine with decay
+rcon_client.py  → sends commands to the server
+response.py     → decides what action to take based on severity
 
 The actual code starts in main with setting up all of our connection variables, such as the Host, port, username, etc. Then the code initiates a connection to the ssh server with our .env file information. If something goes wrong, and the server cannot connect, then the connection will time out.
 
