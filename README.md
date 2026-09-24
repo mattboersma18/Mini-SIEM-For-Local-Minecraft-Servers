@@ -19,7 +19,10 @@ All of the tracking and rules for the file goes into the rules.py file, where ea
 
 Another segment of the code is the severity file, which keeps a score of severity of certan ip addresses and what they are doing. For example, if a certain IP address is trying to do multiple login attempts and spam login attempts, it will start with a low severity and then upgrade to medium and high as the score increases. This will allow the MCCRON library to ban that specific IP address even if the attacker attempts to swtich usernames.
 
-The last two files of the code are the rcon client file and the response file. The rcon_client file sets up the offensive security measures like banning and kicking players. 
+The last two files of the code are the rcon client file and the response file. The rcon_client file sets up the offensive security measures like banning and kicking players.
+
+This is what the program produces when ran, a connection message, followed by joins and disconnects, as well as a small alert for rapid connection and reconnection,
+![Terminal output showing live detection and alerts](screenshots/serverlog.png)
 
 Lessons Learned:
 This project taught me how to design and debug a multi-layered distributed system, from establishing secure SSH connectivity between machines on a home network, to adapting mid-project when my initial assumptions about log architecture (flat files vs. systemd/journald) turned out to be wrong. I learned to structure a Python application into clean, single-responsibility modules, manage credentials safely with environment variables, and isolate dependencies using virtual environments. Building the detection logic itself introduced me to core security engineering concepts such as stateful, time-windowed pattern detection, a tiered severity-scoring model with score decay, and critically designing automated response systems with safety guardrails like self-whitelisting and action deduplication to prevent the tool from taking harmful action on false positives. Throughout, I practiced methodical debugging: isolating each layer of the stack (network access, file permissions, application logic) individually rather than guessing at failures across the whole pipeline, and reading tracebacks carefully to catch real bugs like premature connection closures and data-structure mismatches.
