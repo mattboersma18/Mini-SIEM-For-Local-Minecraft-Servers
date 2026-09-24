@@ -13,12 +13,7 @@ In order to initiate offensive security measures for our program, such as bannin
 MCRCON is a library that installs the Minecraft Remote Console (RCON). This allows you to run commands to the server, create announcements or player whitelists with the program. This library is used to deploy the offesnive security features like banning certain IP addresses that have been detected.
 
 Here is a breif outline of the code, with more information below:
-main.py         → connects, streams logs, orchestrates everything
-parser.py       → converts raw log lines into structured events
-rules.py        → detection logic (rapid reconnect, multi-username, malformed usernames)
-severity.py     → scoring engine with decay
-rcon_client.py  → sends commands to the server
-response.py     → decides what action to take based on severity
+![](screenshots/codeoutline.png)
 
 The actual code starts in main with setting up all of our connection variables, such as the Host, port, username, etc. Then the code initiates a connection to the ssh server with our .env file information. If something goes wrong, and the server cannot connect, then the connection will time out.
 
