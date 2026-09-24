@@ -4,6 +4,8 @@ from paramiko import SSHClient, AutoAddPolicy
 from parser import parse_line
 from rules import check_rapid_reconnection, check_multiple_usernames, check_malformed_username
 import severity
+from rcon_client import ban_ip, kick_player
+from response import decide
 
 load_dotenv()
 
@@ -33,6 +35,13 @@ with SSHClient() as client:
                     if result:
                         level = severity.get_severity(result["score"])
                         print(f"IP {result['ip']} — score: {result['score']:.1f} — severity: {level}")
+                        action = decide(result["ip"], result["score"], level)
+                        if action == "ban":
+                            ban_ip(result["ip"])
+                            print(f"Banned {result['ip']}")
+                        elif action == "kick":
+                            kick_player(event.get("username", ""))
+                            print(f"Kicked {event.get('username')}")
     except KeyboardInterrupt:
         print("\nLog streaming interrupted by user.")
 
